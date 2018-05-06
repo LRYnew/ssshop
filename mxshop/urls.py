@@ -25,7 +25,7 @@ import xadmin
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
 
-    url(r'^api-auth/', include('rest_framework.urls'))
+    url(r'^api-auth/', include('rest_framework.urls')),
 
     # 媒体文件路径
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
