@@ -22,12 +22,14 @@ from rest_framework.routers import DefaultRouter
 from .settings import MEDIA_ROOT
 import xadmin
 
-from goods.views import GoodsListViewSet
+from goods.views import GoodsListViewSet, CategoryViewSet
 
 # 路由
 router = DefaultRouter()
 # 商品路由
-router.register(r'goods', GoodsListViewSet)
+router.register(r'goods', GoodsListViewSet, base_name='goods')
+# 商品分类路由
+router.register(r'categorys', CategoryViewSet, base_name='categorys')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
