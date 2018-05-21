@@ -19,10 +19,12 @@ from django import views
 from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
+from rest_framework_jwt.views import obtain_jwt_token
 from .settings import MEDIA_ROOT
 import xadmin
 
 from goods.views import GoodsListViewSet, CategoryViewSet
+from users.views import SmsCodeViewSet
 
 # 路由
 router = DefaultRouter()
@@ -30,6 +32,8 @@ router = DefaultRouter()
 router.register(r'goods', GoodsListViewSet, base_name='goods')
 # 商品分类路由
 router.register(r'categorys', CategoryViewSet, base_name='categorys')
+# 验证码发送
+router.register(r'codes', SmsCodeViewSet, base_name='codes')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -42,5 +46,8 @@ urlpatterns = [
     # 文档
     url(r'^docs/', include_docs_urls(title="生鲜商城")),
 
-    url(r'^', include(router.urls))
+    url(r'^', include(router.urls)),
+
+    # 登录
+    url(r'^login/', obtain_jwt_token),
 ]
