@@ -24,7 +24,8 @@ from .settings import MEDIA_ROOT
 import xadmin
 
 from goods.views import GoodsListViewSet, CategoryViewSet
-from users.views import SmsCodeViewSet
+from users.views import SmsCodeViewSet, UserViewSet
+from user_operation.views import UserFavViewSet
 
 # 路由
 router = DefaultRouter()
@@ -34,6 +35,10 @@ router.register(r'goods', GoodsListViewSet, base_name='goods')
 router.register(r'categorys', CategoryViewSet, base_name='categorys')
 # 验证码发送
 router.register(r'codes', SmsCodeViewSet, base_name='codes')
+# 用户注册
+router.register(r'users', UserViewSet, base_name='users')
+# 用户收藏
+router.register(r'userfavs', UserFavViewSet, base_name='userfavs')
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),

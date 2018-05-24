@@ -6,7 +6,8 @@ from django.db.models import Q
 from django.contrib.auth import get_user_model
 from rest_framework import mixins, viewsets, status
 from rest_framework.response import Response
-from .serializers import SmsSerializer
+from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
+from .serializers import SmsSerializer, UserRegSerializer
 from utils.sms import SMS
 from mxshop.settings import SMS_APPKEY
 from .models import VerifyCode
@@ -19,7 +20,6 @@ class CustomBackends(ModelBackend):
     """
     重写登录
     """
-
     def authenticate(self, request, username=None, password=None, **kwargs):
         try:
             user = User.objects.get(Q(username=username) | Q(mobile=username))
@@ -68,3 +68,27 @@ class SmsCodeViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         # self.perform_create(serializer)
         # headers = self.get_success_headers(serializer.data)
         # return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class UserViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    """
+    用户
+    """
+    serializer_class = UserRegSerializer
+    queryset = User.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = self.perform_create(serializer)
+
+        re_dict = serializer.data
+        payload = jwt_payload_handler(user)
+        re_dict['token'] = jwt_encode_handler(payload)
+        re_dict['name'] = user.name if user.name else user.username
+
+        headers = self.get_success_headers(serializer.data)
+        return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        return serializer.save()

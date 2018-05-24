@@ -20,11 +20,10 @@ class BaseSetting(object):
     enable_themes = True
     use_bootswatch = True
 
-
 class GlobalSettings(object):
     site_title = "生鲜商城管理后台"
     site_footer = "shop"
-    # menu_style = "accordion"
+    menu_style = "accordion"
 
 
 class VerifyCodeAdmin(object):

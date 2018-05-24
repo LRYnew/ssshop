@@ -26,7 +26,7 @@ class LargeResultsSetPagination(PageNumberPagination):
     max10000_page_size = 100
 
 
-class GoodsListViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class GoodsListViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
     商品列表, 筛选、过滤、搜索、排序
     """
